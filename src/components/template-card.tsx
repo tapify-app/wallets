@@ -12,7 +12,7 @@ export default function TemplateCard({ template }: TemplateCardProps) {
     <Link href={`/temp/${template.id}`}>
       <Card className="w-[350px] cursor-pointer">
         <CardHeader>
-          <CardTitle className="capitalize">{template.name}</CardTitle>
+          <CardTitle>{template.name}</CardTitle>
         </CardHeader>
       </Card>
     </Link>
