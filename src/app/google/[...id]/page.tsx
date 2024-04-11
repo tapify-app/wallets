@@ -14,7 +14,7 @@ interface TemplatePageProps {
 export default async function GoogleWalletPage({ params }: TemplatePageProps) {
   const [tempId, googleWalletId] = params.id || []
 
-  const name = await db.query.apple_wallet.findFirst({
+  const name = await db.query.google_wallet.findFirst({
     where: eq(google_wallet.id, googleWalletId),
     columns: {
       company_name: true,
