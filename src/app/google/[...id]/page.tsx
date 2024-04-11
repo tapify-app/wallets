@@ -1,7 +1,6 @@
-import { AppleLogo } from "@/components/apple-logo"
 import { GoogleLogo } from "@/components/google-logo"
 import { db } from "@/db"
-import { apple_wallet, google_wallet } from "@/db/schema"
+import { google_wallet } from "@/db/schema"
 import { eq } from "drizzle-orm"
 import { notFound } from "next/navigation"
 
