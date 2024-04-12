@@ -34,6 +34,8 @@ export function AppleLogo({ data }: ProfileFormProps) {
       company_name: data.company_name,
       card_color: data.card_color,
       text_color: data.text_color,
+      logo_url: data.logo_url,
+      strip_url: data.strip_url,
     },
   })
 
