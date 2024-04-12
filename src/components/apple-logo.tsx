@@ -17,18 +17,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { updateAppleWallet } from "@/lib/actions"
 import { AppleWallet } from "@/db/schema"
-
-const formSchema = z.object({
-  company_name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  text_color: z.string().min(5, {
-    message: "Username must be at least 2 characters.",
-  }),
-  card_color: z.string().min(5, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+import { formSchema } from "./google-logo"
 
 type Inputs = z.infer<typeof formSchema>
 
@@ -43,8 +32,8 @@ export function AppleLogo({ data }: ProfileFormProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       company_name: data.company_name,
-      card_color: data.card_color!,
-      text_color: data.text_color!,
+      card_color: data.card_color,
+      text_color: data.text_color,
     },
   })
 
@@ -57,6 +46,8 @@ export function AppleLogo({ data }: ProfileFormProps) {
           templates_id: data.templates_id,
           card_color: formData.card_color,
           text_color: formData.text_color,
+          logo_url: formData.logo_url,
+          strip_url: formData.strip_url,
         },
       })
     } catch (error) {
@@ -77,9 +68,9 @@ export function AppleLogo({ data }: ProfileFormProps) {
           name="card_color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company name</FormLabel>
+              <FormLabel>Card Color</FormLabel>
               <FormControl>
-                <Input placeholder="hex color" {...field} />
+                <Input placeholder="color hex" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -93,9 +84,41 @@ export function AppleLogo({ data }: ProfileFormProps) {
           name="text_color"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company name</FormLabel>
+              <FormLabel>text color</FormLabel>
               <FormControl>
-                <Input placeholder="hex color" {...field} />
+                <Input placeholder="text color hex" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="logo_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo color</FormLabel>
+              <FormControl>
+                <Input placeholder="Logo url" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="strip_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>strip url</FormLabel>
+              <FormControl>
+                <Input placeholder="strip_url" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
@@ -109,9 +132,9 @@ export function AppleLogo({ data }: ProfileFormProps) {
           name="company_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company name</FormLabel>
+              <FormLabel>Compnay name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="company_name" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.

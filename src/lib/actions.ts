@@ -17,7 +17,7 @@ interface UpdateAppleWalletProps {
 export async function updateAppleWallet({ data }: UpdateAppleWalletProps) {
   await db
     .update(apple_wallet)
-    .set({ company_name: data.company_name })
+    .set({ ...data })
     .where(eq(apple_wallet.templates_id, data.templates_id!))
 }
 
@@ -28,6 +28,6 @@ interface UpdateGoogleWalletProps {
 export async function updateGoogleWallet({ data }: UpdateGoogleWalletProps) {
   await db
     .update(google_wallet)
-    .set({ company_name: data.company_name })
+    .set({ ...data })
     .where(eq(google_wallet.templates_id, data.templates_id!))
 }

@@ -16,27 +16,43 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { updateAppleWallet, updateGoogleWallet } from "@/lib/actions"
+import { GoogleWallet } from "@/db/schema"
 
-const formSchema = z.object({
+export const formSchema = z.object({
   company_name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: "company_name must be at least 2 characters.",
+  }),
+  text_color: z.string().min(5, {
+    message: "text_color must be at least 2 characters.",
+  }),
+  card_color: z.string().min(5, {
+    message: "card_color must be at least 2 characters.",
+  }),
+  strip_url: z.string().min(5, {
+    message: "strip_url must be at least 2 characters.",
+  }),
+  logo_url: z.string().min(5, {
+    message: "logo_url must be at least 2 characters.",
   }),
 })
 
 type Inputs = z.infer<typeof formSchema>
 
 interface ProfileFormProps {
-  tempId: string
-  company_name: string
+  data: GoogleWallet
 }
 
-export function GoogleLogo({ tempId, company_name }: ProfileFormProps) {
+export function GoogleLogo({ data }: ProfileFormProps) {
   const [isLoading, setIsLoading] = React.useState(false)
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company_name: company_name,
+      company_name: data.company_name,
+      card_color: data.card_color,
+      text_color: data.text_color,
+      logo_url: data.logo_url,
+      strip_url: data.strip_url,
     },
   })
 
@@ -46,7 +62,11 @@ export function GoogleLogo({ tempId, company_name }: ProfileFormProps) {
       await updateGoogleWallet({
         data: {
           company_name: formData.company_name,
-          templates_id: tempId,
+          templates_id: data.templates_id,
+          card_color: formData.card_color,
+          text_color: formData.text_color,
+          logo_url: formData.logo_url,
+          strip_url: formData.strip_url,
         },
       })
     } catch (error) {
@@ -64,12 +84,76 @@ export function GoogleLogo({ tempId, company_name }: ProfileFormProps) {
       >
         <FormField
           control={form.control}
+          name="card_color"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Card Color</FormLabel>
+              <FormControl>
+                <Input placeholder="color hex" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="text_color"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>text color</FormLabel>
+              <FormControl>
+                <Input placeholder="text color hex" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="logo_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo color</FormLabel>
+              <FormControl>
+                <Input placeholder="Logo url" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="strip_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>strip url</FormLabel>
+              <FormControl>
+                <Input placeholder="strip_url" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="company_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company name</FormLabel>
+              <FormLabel>Compnay name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="company_name" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.

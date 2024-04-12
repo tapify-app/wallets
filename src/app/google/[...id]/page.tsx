@@ -11,23 +11,20 @@ interface TemplatePageProps {
 }
 
 export default async function GoogleWalletPage({ params }: TemplatePageProps) {
-  const [tempId, googleWalletId] = params.id || []
+  const [googleWalletId] = params.id || []
 
-  const name = await db.query.google_wallet.findFirst({
+  const googleData = await db.query.google_wallet.findFirst({
     where: eq(google_wallet.id, googleWalletId),
-    columns: {
-      company_name: true,
-    },
   })
 
-  if (!name) {
+  if (!googleData) {
     return notFound()
   }
 
   return (
     <main className="container max-w-screen-xl p-6 h-screen space-y-6">
       <div className="flex items-center h-full  w-full justify-center ">
-        <GoogleLogo tempId={tempId} company_name={name.company_name} />
+        <GoogleLogo data={googleData} />
       </div>
     </main>
   )
