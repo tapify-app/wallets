@@ -4,13 +4,14 @@ import { db } from "@/db"
 import {
   AppleWallet,
   GoogleWallet,
+  NewAppleWallet,
   apple_wallet,
   google_wallet,
 } from "@/db/schema"
 import { eq } from "drizzle-orm"
 
 interface UpdateAppleWalletProps {
-  data: AppleWallet
+  data: NewAppleWallet
 }
 
 export async function updateAppleWallet({ data }: UpdateAppleWalletProps) {

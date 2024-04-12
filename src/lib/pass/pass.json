@@ -1,0 +1,25 @@
+{
+  "formatVersion": 1,
+  "passTypeIdentifier": "pass.com.demo.tapifyapp",
+  "teamIdentifier": "1df23299add07",
+  "serialNumber": "jdjkaodms",
+  "organizationName": "Tapify",
+  "description": "Tapify Business Card",
+  "logoText": "Tapify Card",
+  "foregroundColor": "rgb(0, 0, 102)",
+  "backgroundColor": "rgb(255, 255, 255)",
+  "storeCard": {
+    "secondaryFields": [
+      {
+        "key": "name",
+        "label": "SECURITY MANAGER",
+        "value": "Bruno Hurst"
+      }
+    ]
+  },
+  "barcode": {
+    "format": "PKBarcodeFormatQR",
+    "message": "https://www.tapify.com",
+    "messageEncoding": "iso-8859-1"
+  }
+}

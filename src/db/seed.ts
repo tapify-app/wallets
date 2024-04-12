@@ -20,12 +20,16 @@ async function seedData() {
   for (const templateId of templateIds) {
     // Create apple_wallet
     await db.insert(apple_wallet).values({
+      card_color: faker.color.rgb(),
+      text_color: faker.color.rgb(),
       company_name: faker.company.name(),
       templates_id: templateId,
     })
 
     // Create google_wallet
     await db.insert(google_wallet).values({
+      card_color: faker.color.rgb(),
+      text_color: faker.color.rgb(),
       company_name: faker.company.name(),
       templates_id: templateId,
     })

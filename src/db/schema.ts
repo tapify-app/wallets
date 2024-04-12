@@ -1,4 +1,5 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 export const templates = pgTable("templates", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -9,6 +10,8 @@ export type Template = typeof templates.$inferSelect
 
 export const apple_wallet = pgTable("apple_wallet", {
   id: uuid("id").defaultRandom().primaryKey(),
+  card_color: text("strip_url").notNull(),
+  text_color: text("strip_url").notNull(),
   company_name: text("company_name").notNull(),
   templates_id: uuid("templates_id").references(() => templates.id, {
     onDelete: "cascade",
@@ -16,10 +19,14 @@ export const apple_wallet = pgTable("apple_wallet", {
   }),
 })
 
-export type AppleWallet = typeof apple_wallet.$inferInsert
+export type NewAppleWallet = typeof apple_wallet.$inferInsert
+export type AppleWallet = typeof apple_wallet.$inferSelect
+export const AppleWalletSchema = createInsertSchema(apple_wallet)
 
 export const google_wallet = pgTable("google_wallet", {
   id: uuid("id").defaultRandom().primaryKey(),
+  card_color: text("strip_url").notNull(),
+  text_color: text("strip_url").notNull(),
   company_name: text("company_name").notNull(),
   templates_id: uuid("templates_id").references(() => templates.id, {
     onDelete: "cascade",

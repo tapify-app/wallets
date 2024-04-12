@@ -1,28 +1,26 @@
-import PassSigner from "passsigner-js"
-import crypto from "crypto"
-import fs from "fs"
+import { NextApiResponse } from "next"
+import PassGenerator from "passgenerator-js"
 
-export async function POST(req: Request) {
-  function getFileSHA1(filePath: string): string {
-    const shasum = crypto.createHash("sha1")
-    shasum.update(fs.readFileSync(filePath))
-    return shasum.digest("hex")
-  }
+const passGenerator = new PassGenerator({
+  appleWWDRCA: "D:/wallets/app/src/lib/pass/AppleWWDRCA.cer",
+  signCert: "D:/wallets/app/src/lib/pass/passmaker.p12",
+  password: "test",
+})
 
-  const manifest: { [key: string]: string } = {
-    "icon.png": getFileSHA1("path/to/your/icon.png"),
-    "icon@2x.png": getFileSHA1("path/to/your/icon@2x.png"),
-    "logo.png": getFileSHA1("path/to/your/logo.png"),
-    "logo@2x.png": getFileSHA1("path/to/your/logo@2x.png"),
-    "pass.json": getFileSHA1("path/to/your/pass.json"),
-  }
+export async function POST(req: Request, res: NextApiResponse) {
+  const pass = passGenerator.createPass()
 
-  const passSigner = new PassSigner({
-    appleWWDRCA: "D:/wallets/app/src/lib/pass/AppleWWDRCA.cer",
-    signCert: "D:/wallets/app/src/lib/pass/passmaker.p12",
-    password: "test",
-  })
+  pass.add("icon.png", "D:/wallets/app/src/lib/pass/assests/icon.png")
+  pass.add("icon@2x.png", "D:/wallets/app/src/lib/pass/assests/icon@2x.png")
+  pass.add("logo.png", "D:/wallets/app/src/lib/pass/assests/logo.png")
+  pass.add("logo@2x.png", "D:/wallets/app/src/lib/pass/assests/icon@2x.png")
+  pass.add("pass.json", "D:/wallets/app/src/lib/pass/pass.json")
+  pass.add("strip.png", "D:/wallets/app/src/lib/pass/assests/strip.png")
+  pass.add("strip@2x.png", "D:/wallets/app/src/lib/pass/assests/strip@2x.png")
 
-  const pkpassBuffer = passSigner.sign(JSON.stringify(manifest))
-  fs.writeFileSync("wallet/pass.pkpass", pkpassBuffer)
+  const pkpass = pass.generate()
+
+  res.setHeader("Content-Type", "application/vnd.apple.pkpass")
+  res.setHeader("Content-Disposition", "attachment; filename=pass.pkpass")
+  res.send(pkpass)
 }
