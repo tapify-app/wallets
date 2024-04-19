@@ -11,10 +11,10 @@ interface TemplatePageProps {
 }
 
 export default async function AppleWalletPage({ params }: TemplatePageProps) {
-  const [tempId, appleWalletId] = params.id || []
+  const [tempId] = params.id || []
 
   const appleData = await db.query.apple_wallet.findFirst({
-    where: eq(apple_wallet.id, appleWalletId),
+    where: eq(apple_wallet.templates_id, Number(tempId)),
   })
 
   if (!appleData) {
@@ -24,7 +24,7 @@ export default async function AppleWalletPage({ params }: TemplatePageProps) {
   return (
     <main className="container max-w-screen-xl p-6 h-screen space-y-6">
       <div className="flex items-center h-full  w-full justify-center ">
-        <AppleLogo data={appleData} />
+        <AppleLogo tempId={tempId} data={appleData} />
       </div>
     </main>
   )

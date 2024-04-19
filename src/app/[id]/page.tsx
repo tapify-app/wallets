@@ -7,12 +7,12 @@ import { notFound } from "next/navigation"
 
 interface TemplatePageProps {
   params: {
-    name: string | null
+    id: Number | null
   }
 }
 
 export default async function WalletsQRPage({ params }: TemplatePageProps) {
-  if (!params.name) {
+  if (!params.id) {
     return notFound()
   }
 
@@ -21,9 +21,9 @@ export default async function WalletsQRPage({ params }: TemplatePageProps) {
     .from(templates)
     .leftJoin(apple_wallet, eq(apple_wallet.templates_id, templates.id))
     .leftJoin(google_wallet, eq(google_wallet.templates_id, templates.id))
-    .where(eq(templates.name, params.name))
+    .where(eq(templates.id, Number(params.id)))
     .then((row) => row[0])
-
+    
   if (!templateData) {
     return notFound()
   }
@@ -31,8 +31,8 @@ export default async function WalletsQRPage({ params }: TemplatePageProps) {
   return (
     <main className="container max-w-screen-xl p-6 space-y-6">
       <div className="flex w-full gap-4">
-        <AppleQr />
-        <GoogleQr />
+        <AppleQr id={params.id}/>
+        <GoogleQr id={params.id}/>
       </div>
     </main>
   )

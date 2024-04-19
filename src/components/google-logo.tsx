@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,10 +13,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { updateAppleWallet, updateGoogleWallet } from "@/lib/actions"
-import { GoogleWallet } from "@/db/schema"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { updateAppleWallet, updateGoogleWallet } from "@/lib/actions";
+import { GoogleWallet } from "@/db/schema";
+import axios from "axios";
 
 export const formSchema = z.object({
   company_name: z.string().min(2, {
@@ -34,45 +35,59 @@ export const formSchema = z.object({
   logo_url: z.string().min(5, {
     message: "logo_url must be at least 2 characters.",
   }),
-})
+  name: z.string().min(5, {
+    message: "name must be at least 2 characters.",
+  }),
+  designation: z.string().min(5, {
+    message: "designation must be at least 2 characters.",
+  }),
+  qr_value: z.string().min(5, {
+    message: "qr_value must be at least 2 characters.",
+  }),
+  icon_url: z.string().min(5, {
+    message: "icon_url must be at least 2 characters.",
+  }),
+});
 
-type Inputs = z.infer<typeof formSchema>
+type Inputs = z.infer<typeof formSchema>;
 
 interface ProfileFormProps {
-  data: GoogleWallet
+  tempId: string;
+  data?: GoogleWallet;
 }
 
-export function GoogleLogo({ data }: ProfileFormProps) {
-  const [isLoading, setIsLoading] = React.useState(false)
+export function GoogleLogo({ tempId, data }: ProfileFormProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company_name: data.company_name,
-      card_color: data.card_color,
-      text_color: data.text_color,
-      logo_url: data.logo_url,
-      strip_url: data.strip_url,
+      company_name: data?.company_name,
+      card_color: data?.card_color,
+      text_color: data?.text_color,
+      logo_url: data?.logo_url,
+      strip_url: data?.strip_url,
+      name: data?.name,
+      designation: data?.designation,
+      qr_value: data?.qr_value,
+      icon_url: data?.icon_url,
     },
-  })
+  });
 
   async function onSubmit(formData: Inputs) {
     try {
-      setIsLoading(true)
-      await updateGoogleWallet({
-        data: {
-          company_name: formData.company_name,
-          templates_id: data.templates_id,
-          card_color: formData.card_color,
-          text_color: formData.text_color,
-          logo_url: formData.logo_url,
-          strip_url: formData.strip_url,
-        },
-      })
+      setIsLoading(true);
+      await axios.post(
+        "https://bbe5-2402-a00-162-371c-5403-9967-26fa-b1c2.ngrok-free.app/template/google-wallet",
+        {
+          ...formData,
+          templates_id: tempId,
+        }
+      );
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -146,6 +161,72 @@ export function GoogleLogo({ data }: ProfileFormProps) {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Name" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="designation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Designation</FormLabel>
+              <FormControl>
+                <Input placeholder="Designation" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="qr_value"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>QR Value</FormLabel>
+              <FormControl>
+                <Input placeholder="QR Value" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="icon_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Icon Url</FormLabel>
+              <FormControl>
+                <Input placeholder="Icon Url" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="company_name"
@@ -167,5 +248,5 @@ export function GoogleLogo({ data }: ProfileFormProps) {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

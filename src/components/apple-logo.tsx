@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,49 +13,52 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { updateAppleWallet } from "@/lib/actions"
-import { AppleWallet } from "@/db/schema"
-import { formSchema } from "./google-logo"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { updateAppleWallet } from "@/lib/actions";
+import { AppleWallet } from "@/db/schema";
+import { formSchema } from "./google-logo";
+import axios from "axios";
 
-type Inputs = z.infer<typeof formSchema>
+type Inputs = z.infer<typeof formSchema>;
 
 interface ProfileFormProps {
-  data: AppleWallet
+  tempId: string;
+  data: AppleWallet;
 }
 
-export function AppleLogo({ data }: ProfileFormProps) {
-  const [isLoading, setIsLoading] = React.useState(false)
+export function AppleLogo({ tempId, data }: ProfileFormProps) {
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company_name: data.company_name,
-      card_color: data.card_color,
-      text_color: data.text_color,
-      logo_url: data.logo_url,
-      strip_url: data.strip_url,
+      company_name: data?.company_name,
+      card_color: data?.card_color,
+      text_color: data?.text_color,
+      logo_url: data?.logo_url,
+      strip_url: data?.strip_url,
+      name: data?.name,
+      designation: data?.designation,
+      qr_value: data?.qr_value,
+      icon_url: data?.icon_url,
     },
-  })
+  });
 
   async function onSubmit(formData: Inputs) {
     try {
-      setIsLoading(true)
-      await updateAppleWallet({
-        data: {
-          company_name: formData.company_name,
-          templates_id: data.templates_id,
-          card_color: formData.card_color,
-          text_color: formData.text_color,
-          logo_url: formData.logo_url,
-          strip_url: formData.strip_url,
-        },
-      })
+      setIsLoading(true);
+      await axios.post(
+        "https://bbe5-2402-a00-162-371c-5403-9967-26fa-b1c2.ngrok-free.app/template/apple-wallet",
+        {
+          ...formData,
+          templates_id: tempId,
+        }
+      );
     } catch (error) {
-      console.error(error)
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -145,10 +148,74 @@ export function AppleLogo({ data }: ProfileFormProps) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="icon_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Compnay name</FormLabel>
+              <FormControl>
+                <Input placeholder="icon_url" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="qr_value"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>QR value</FormLabel>
+              <FormControl>
+                <Input placeholder="qr_value" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="name" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="designation"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Designation</FormLabel>
+              <FormControl>
+                <Input placeholder="designation" {...field} />
+              </FormControl>
+              <FormDescription>
+                This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button type="submit" disabled={isLoading}>
           Submit
         </Button>
       </form>
     </Form>
-  )
+  );
 }
