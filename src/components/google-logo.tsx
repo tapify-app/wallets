@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateAppleWallet, updateGoogleWallet } from "@/lib/actions";
 import { GoogleWallet } from "@/db/schema";
 import axios from "axios";
 
@@ -77,13 +76,10 @@ export function GoogleLogo({ tempId, data }: ProfileFormProps) {
   async function onSubmit(formData: Inputs) {
     try {
       setIsLoading(true);
-      await axios.post(
-        "https://bbe5-2402-a00-162-371c-5403-9967-26fa-b1c2.ngrok-free.app/template/google-wallet",
-        {
-          ...formData,
-          templates_id: tempId,
-        }
-      );
+      await axios.post("http://localhost:4000/template/google-wallet", {
+        ...formData,
+        templates_id: tempId,
+      });
     } catch (error) {
       console.error(error);
     } finally {

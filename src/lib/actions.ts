@@ -2,11 +2,11 @@
 
 import { db } from "@/db"
 import {
-  AppleWallet,
   GoogleWallet,
   NewAppleWallet,
   apple_wallet,
   google_wallet,
+  templates,
 } from "@/db/schema"
 import { eq } from "drizzle-orm"
 
@@ -30,4 +30,9 @@ export async function updateGoogleWallet({ data }: UpdateGoogleWalletProps) {
     .update(google_wallet)
     .set({ ...data })
     .where(eq(google_wallet.templates_id, data.templates_id!))
+}
+export async function createTemplate({ name }: { name: string }) {
+await db.insert(templates)
+.values({name})
+
 }

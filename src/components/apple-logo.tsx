@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateAppleWallet } from "@/lib/actions";
 import { AppleWallet } from "@/db/schema";
 import { formSchema } from "./google-logo";
 import axios from "axios";
@@ -24,7 +23,7 @@ type Inputs = z.infer<typeof formSchema>;
 
 interface ProfileFormProps {
   tempId: string;
-  data: AppleWallet;
+  data?: AppleWallet;
 }
 
 export function AppleLogo({ tempId, data }: ProfileFormProps) {
@@ -49,7 +48,7 @@ export function AppleLogo({ tempId, data }: ProfileFormProps) {
     try {
       setIsLoading(true);
       await axios.post(
-        "https://bbe5-2402-a00-162-371c-5403-9967-26fa-b1c2.ngrok-free.app/template/apple-wallet",
+        "http://localhost:4000/template/apple-wallet",
         {
           ...formData,
           templates_id: tempId,
@@ -153,7 +152,7 @@ export function AppleLogo({ tempId, data }: ProfileFormProps) {
           name="icon_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Compnay name</FormLabel>
+              <FormLabel>Icon Url</FormLabel>
               <FormControl>
                 <Input placeholder="icon_url" {...field} />
               </FormControl>

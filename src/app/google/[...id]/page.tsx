@@ -2,7 +2,6 @@ import { GoogleLogo } from "@/components/google-logo"
 import { db } from "@/db"
 import { google_wallet } from "@/db/schema"
 import { eq } from "drizzle-orm"
-import { notFound } from "next/navigation"
 
 interface TemplatePageProps {
   params: {
@@ -17,12 +16,9 @@ export default async function GoogleWalletPage({ params }: TemplatePageProps) {
     where: eq(google_wallet.templates_id, Number(tempId)),
   })
 
-  // if (!googleData) {
-  //   return notFound()
-  // }
 
   return (
-    <main className="container max-w-screen-xl p-6 h-screen space-y-6">
+    <main className="container max-w-screen-xl p-6 space-y-6">
       <div className="flex items-center h-full  w-full justify-center ">
         <GoogleLogo tempId={tempId} data={googleData} />
       </div>

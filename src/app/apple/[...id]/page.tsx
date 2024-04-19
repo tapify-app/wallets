@@ -2,7 +2,6 @@ import { AppleLogo } from "@/components/apple-logo"
 import { db } from "@/db"
 import { apple_wallet } from "@/db/schema"
 import { eq } from "drizzle-orm"
-import { notFound } from "next/navigation"
 
 interface TemplatePageProps {
   params: {
@@ -17,12 +16,9 @@ export default async function AppleWalletPage({ params }: TemplatePageProps) {
     where: eq(apple_wallet.templates_id, Number(tempId)),
   })
 
-  if (!appleData) {
-    return notFound()
-  }
 
   return (
-    <main className="container max-w-screen-xl p-6 h-screen space-y-6">
+    <main className="container max-w-screen-xl p-6 space-y-6">
       <div className="flex items-center h-full  w-full justify-center ">
         <AppleLogo tempId={tempId} data={appleData} />
       </div>
